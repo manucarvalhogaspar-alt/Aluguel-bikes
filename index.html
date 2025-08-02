@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Aluguel de Bikes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .status-em-uso {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .status-devolvido {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .price {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .bike-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .bike-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .bike-card h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .bike-features {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .bike-features li {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🏍 Sistema de Aluguel de Bikes</h1>
+    
+    <div class="bike-list">
+        <div class="bike-card">
+            <h3>Nossas Bikes Disponíveis</h3>
+            <ul class="bike-features">
+                <li><strong>Aro 29 marcha:</strong> 2 unidades</li>
+                <li><strong>Aro 26 cadeirinha:</strong> 1 unidade</li>
+                <li><strong>Aro 26 marcha:</strong> 2 unidades (1 cesta, 1 comum)</li>
+                <li><strong>Aro 26 comum:</strong> 4 unidades (2 cesta, 2 comum)</li>
+                <li><strong>Aro 24 marcha:</strong> 3 unidades (1 cesta, 2 comum)</li>
+                <li><strong>Aro 20 comum:</strong> 2 unidades</li>
+                <li><strong>Triciclo família:</strong> 1 unidade</li>
+            </ul>
+            <p><strong>Preços:</strong></p>
+            <ul class="bike-features">
+                <li>Todas bikes: R$ 0,50/min</li>
+                <li>Triciclo família: R$ 0,75/min</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>📝 Registrar Aluguel</h2>
+        <form id="rentalForm">
+            <div class="form-group">
+                <label for="nome">Nome Completo do Cliente:</label>
+                <input type="text" id="nome" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" required placeholder="Somente números">
+            </div>
+            
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" required placeholder="(00) 00000-0000">
+            </div>
+            
+            <div class="form-group">
+                <label for="bike">Modelo da Bike:</label>
+                <select id="bike" required>
+                    <option value="">Selecione o modelo...</option>
+                    <optgroup label="Aro 29">
+                        <option value="Aro 29 marcha">Aro 29 marcha (R$ 0,50/min)</option>
+                    </optgroup>
+                    <optgroup label="Aro 26">
+                        <option value="Aro 26 cadeirinha">Aro 26 cadeirinha (R$ 0,50/min)</option>
+                        <option value="Aro 26 marcha cesta">Aro 26 marcha cesta (R$ 0,50/min)</option>
+                        <option value="Aro 26 marcha comum">Aro 26 marcha comum (R$ 0,50/min)</option>
+                        <option value="Aro 26 comum cesta">Aro 26 comum cesta (R$ 0,50/min)</option>
+                        <option value="Aro 26 comum">Aro 26 comum (R$ 0,50/min)</option>
+                    </optgroup>
+                    <optgroup label="Aro 24">
+                        <option value="Aro 24 marcha cesta">Aro 24 marcha cesta (R$ 0,50/min)</option>
+                        <option value="Aro 24 marcha comum">Aro 24 marcha comum (R$ 0,50/min)</option>
+                    </optgroup>
+                    <optgroup label="Aro 20">
+                        <option value="Aro 20 comum">Aro 20 comum (R$ 0,50/min)</option>
+                    </optgroup>
+                    <optgroup label="Triciclo">
+                        <option value="Triciclo família">Triciclo família (R$ 0,75/min)</option>
+                    </optgroup>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="saida">Data e Hora de Saída:</label>
+                <input type="datetime-local" id="saida" required>
+            </div>
+            
+            <button type="button" onclick="registrarSaida()">Registrar Aluguel</button>
+        </form>
+    </div>
+    
+    <div class="form-section">
+        <h2>⏱ Registrar Devolução</h2>
+        <div class="form-group">
+            <label for="cpfDevolucao">CPF do Cliente:</label>
+            <input type="text" id="cpfDevolucao" placeholder="Digite o CPF sem pontuação">
+        </div>
+        <div class="form-group">
+            <label for="chegada">Data e Hora de Devolução:</label>
+            <input type="datetime-local" id="chegada">
+        </div>
+        <button type="button" onclick="registrarChegada()">Registrar Devolução</button>
+    </div>
+    
+    <div class="form-section">
+        <h2>📋 Registros de Aluguel</h2>
+        <table id="registros">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>CPF</th>
+                    <th>Bike</th>
+                    <th>Saída</th>
+                    <th>Devolução</th>
+                    <th>Tempo</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    
+    <script>
+        // Armazena os aluguéis no localStorage do navegador
+        let alugueis = JSON.parse(localStorage.getItem('alugueis')) || [];
+        
+        // Preço por minuto para cada tipo de bike
+        const precos = {
+            "Triciclo família": 0.75,
+            "default": 0.50
+        };
+        
+        // Atualiza a tabela com os registros
+        function atualizarTabela() {
+            const tabela = document.querySelector('#registros tbody');
+            tabela.innerHTML = '';
+            
+            // Ordena por data de saída (mais recente primeiro)
+            alugueis.sort((a, b) => new Date(b.saida) - new Date(a.saida));
+            
+            alugueis.forEach(aluguel => {
+                const row = tabela.insertRow();
+                
+                // Calcula tempo e valor
+                let tempoMinutos = 0;
+                let valor = 0;
+                let status = '<span class="status-em-uso">EM USO</span>';
+                
+                if (aluguel.chegada) {
+                    const diffMs = new Date(aluguel.chegada) - new Date(aluguel.saida);
+                    tempoMinutos = Math.round(diffMs / (1000 * 60));
+                    
+                    // Verifica se é triciclo para aplicar preço diferente
+                    const precoPorMinuto = precos[aluguel.bike] || precos.default;
+                    valor = tempoMinutos * precoPorMinuto;
+                    
+                    status = '<span class="status-devolvido">DEVOLVIDO</span>';
+                }
+                
+                // Formata os dados para exibição
+                row.innerHTML = `
+                    <td>${aluguel.nome}</td>
+                    <td>${formatarCPF(aluguel.cpf)}</td>
+                    <td>${aluguel.bike}</td>
+                    <td>${formatarDataHora(aluguel.saida)}</td>
+                    <td>${aluguel.chegada ? formatarDataHora(aluguel.chegada) : '-'}</td>
+                    <td>${aluguel.chegada ? formatarTempo(tempoMinutos) : '-'}</td>
+                    <td class="price">${aluguel.chegada ? 'R$ ' + valor.toFixed(2).replace('.', ',') : '-'}</td>
+                    <td>${status}</td>
+                `;
+            });
+        }
+        
+        // Registra a saída de uma bike
+        function registrarSaida() {
+            const nome = document.getElementById('nome').value.trim();
+            const cpf = document.getElementById('cpf').value.replace(/\D/g, '');
+            const telefone = document.getElementById('telefone').value;
+            const bike = document.getElementById('bike').value;
+            const saida = document.getElementById('saida').value;
+            
+            // Validações básicas
+            if (!nome || !cpf || !telefone || !bike || !saida) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+            
+            if (!validarCPF(cpf)) {
+                alert('CPF inválido!');
+                return;
+            }
+            
+            // Verifica se o cliente já tem bike em uso
+            const bikeEmUso = alugueis.some(a => a.cpf === cpf && !a.chegada);
+            if (bikeEmUso) {
+                alert('Este cliente já possui uma bike em uso!');
+                return;
+            }
+            
+            // Cria o registro de aluguel
+            const aluguel = {
+                nome,
+                cpf,
+                telefone,
+                bike,
+                saida,
+                chegada: null
+            };
+            
+            alugueis.push(aluguel);
+            localStorage.setItem('alugueis', JSON.stringify(alugueis));
+            
+            // Limpa o formulário
+            document.getElementById('rentalForm').reset();
+            
+            atualizarTabela();
+            alert('Aluguel registrado com sucesso!');
+        }
+        
+        // Registra a devolução de uma bike
+        function registrarChegada() {
+            const cpf = document.getElementById('cpfDevolucao').value.replace(/\D/g, '');
+            const chegada = document.getElementById('chegada').value;
+            
+            if (!cpf || !chegada) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+            
+            // Encontra o aluguel ativo do cliente
+            const aluguel = alugueis.find(a => a.cpf === cpf && !a.chegada);
+            
+            if (aluguel) {
+                // Verifica se a data de devolução é anterior à data de saída
+                if (new Date(chegada) < new Date(aluguel.saida)) {
+                    alert('A data de devolução não pode ser anterior à data de saída!');
+                    return;
+                }
+                
+                aluguel.chegada = chegada;
+                localStorage.setItem('alugueis', JSON.stringify(alugueis));
+                
+                // Limpa o formulário
+                document.getElementById('cpfDevolucao').value = '';
+                document.getElementById('chegada').value = '';
+                
+                atualizarTabela();
+                
+                // Calcula o valor para mostrar no alerta
+                const diffMs = new Date(chegada) - new Date(aluguel.saida);
+                const tempoMinutos = Math.round(diffMs / (1000 * 60));
+                const precoPorMinuto = precos[aluguel.bike] || precos.default;
+                const valor = tempoMinutos * precoPorMinuto;
+                
+                alert(`Devolução registrada com sucesso!\n\nTempo de uso: ${formatarTempo(tempoMinutos)}\nValor total: R$ ${valor.toFixed(2).replace('.', ',')}`);
+            } else {
+                alert('Não foi encontrado aluguel em aberto para este CPF ou o CPF está incorreto!');
+            }
+        }
+        
+        // Função para validar CPF
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            if (cpf.length !== 11) return false;
+            
+            // Verifica se todos os dígitos são iguais
+            if (/^(\d)\1{10}$/.test(cpf)) return false;
+            
+            // Validação dos dígitos verificadores
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let resto = 11 - (soma % 11);
+            let digito1 = resto === 10 || resto === 11 ? 0 : resto;
+            
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            resto = 11 - (soma % 11);
+            let digito2 = resto === 10 || resto === 11 ? 0 : resto;
+            
+            return parseInt(cpf.charAt(9)) === digito1 && parseInt(cpf.charAt(10)) === digito2;
+        }
+        
+        // Formata CPF para exibição
+        function formatarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+        
+        // Formata data e hora para exibição
+        function formatarDataHora(dataHora) {
+            if (!dataHora) return '-';
+            const data = new Date(dataHora);
+            return data.toLocaleString('pt-BR');
+        }
+        
+        // Formata tempo em minutos para horas e minutos
+        function formatarTempo(minutos) {
+            if (minutos < 60) return `${minutos} min`;
+            const horas = Math.floor(minutos / 60);
+            const mins = minutos % 60;
+            return `${horas}h ${mins}min`;
+        }
+        
+        // Máscara para telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.substring(0, 11);
+            
+            if (value.length > 0) {
+                value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                if (value.length > 10) {
+                    value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                } else {
+                    value = value.replace(/(\d)(\d{3})$/, '$1-$2');
+                }
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Máscara para CPF
+        document.getElementById('cpf').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.substring(0, 11);
+            
+            if (value.length > 0) {
+                value = value.replace(/^(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+                value = value.replace(/\.(\d{3})(\d)/, '.$1-$2');
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Máscara para CPF na devolução
+        document.getElementById('cpfDevolucao').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.substring(0, 11);
+            e.target.value = value;
+        });
+        
+        // Carrega os dados ao iniciar
+        window.onload = function() {
+            // Define a data/hora atual como padrão nos campos datetime-local
+            const now = new Date();
+            const nowStr = now.toISOString().slice(0, 16);
+            document.getElementById('saida').value = nowStr;
+            document.getElementById('chegada').value = nowStr;
+            
+            atualizarTabela();
+        };
+    </script>
+</body>
+</html>
